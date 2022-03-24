@@ -6,6 +6,7 @@ import (
 	"compress/gzip"
 	"context"
 	"fmt"
+	"io"
 	"io/fs"
 	"net/url"
 	"os"
@@ -18,6 +19,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	modzip "golang.org/x/mod/zip"
 
 	dependenciesStore "github.com/sourcegraph/sourcegraph/internal/codeintel/dependencies/store"
 	"github.com/sourcegraph/sourcegraph/internal/conf/reposource"
@@ -247,6 +249,14 @@ func (info *fileInfo) Mode() fs.FileMode  { return 0600 }
 func (info *fileInfo) ModTime() time.Time { return time.Unix(0, 0) }
 func (info *fileInfo) IsDir() bool        { return false }
 func (info *fileInfo) Sys() interface{}   { return nil }
+
+var _ modzip.File = &fileInfo{}
+
+func (info *fileInfo) Path() string                { return info.path }
+func (info *fileInfo) Lstat() (os.FileInfo, error) { return info, nil }
+func (info *fileInfo) Open() (io.ReadCloser, error) {
+	return io.NopCloser(bytes.NewReader(info.contents)), nil
+}
 
 func TestDecompressTgz(t *testing.T) {
 	table := []struct {

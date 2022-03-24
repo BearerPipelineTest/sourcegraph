@@ -1,8 +1,10 @@
 package server
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io/fs"
 	"os"
 	"os/exec"
 	"path"
@@ -17,6 +19,7 @@ import (
 	"github.com/sourcegraph/sourcegraph/internal/errcode"
 	"github.com/sourcegraph/sourcegraph/internal/extsvc/gomodproxy"
 	"github.com/sourcegraph/sourcegraph/internal/repos"
+	"github.com/sourcegraph/sourcegraph/internal/unpack"
 	"github.com/sourcegraph/sourcegraph/internal/vcs"
 	"github.com/sourcegraph/sourcegraph/lib/errors"
 	"github.com/sourcegraph/sourcegraph/schema"
@@ -153,9 +156,8 @@ func (s *GoModulesSyncer) RemoteShowCommand(ctx context.Context, remoteURL *vcs.
 }
 
 // moduleVersions returns the list of Go module versions for the given module.
-// The returned dependencies are sorted in descending semver order (newest first).
 func (s *GoModulesSyncer) moduleVersions(ctx context.Context, mod string) (versions []*reposource.GoDependency, err error) {
-	for _, d := range s.dependencies() {
+	for _, d := range s.connection.Dependencies {
 		dep, err := reposource.ParseGoDependency(d)
 		if err != nil {
 			log15.Warn("skipping malformed go dependency", "dep", d, "error", err)
@@ -185,13 +187,6 @@ func (s *GoModulesSyncer) moduleVersions(ctx context.Context, mod string) (versi
 	}
 
 	return versions, nil
-}
-
-func (s *GoModulesSyncer) dependencies() []string {
-	if s.connection.Dependencies == nil {
-		return nil
-	}
-	return s.connection.Dependencies
 }
 
 // gitPushDependencyTag pushes a git tag to the given bareGitDirectory path. The
@@ -243,25 +238,9 @@ func (s *GoModulesSyncer) gitPushDependencyTag(ctx context.Context, bareGitDirec
 
 // commitZip initializes a git repository in the given working directory and creates
 // a git commit in that contains all the file contents of the given zip archive.
-func (s *GoModulesSyncer) commitZip(ctx context.Context, dep *reposource.GoDependency, workDir string, zipBytes []byte) error {
-	zipFilename := path.Join(workDir, "mod.zip")
-	err := os.WriteFile(zipFilename, zipBytes, 0666)
-	if err != nil {
-		return errors.Wrapf(err, "failed to create go module zip file %q on disk", zipFilename)
-	}
-
-	modDir := path.Join(workDir, "mod")
-	err = modzip.Unzip(modDir, dep.Version, zipFilename)
-	if err != nil {
-		return errors.Wrapf(err, "failed to unzip go module zip file %q", zipFilename)
-	}
-
-	if err = os.RemoveAll(zipFilename); err != nil {
-		return errors.Wrapf(err, "failed to remove module zip file %q", zipFilename)
-	}
-
-	if err = stripSingleOutermostDirectory(workDir); err != nil {
-		return errors.Wrapf(err, "failed to strip single outer-most dir")
+func (s *GoModulesSyncer) commitZip(ctx context.Context, dep *reposource.GoDependency, workDir string, zipBytes []byte) (err error) {
+	if err = unzip(dep, zipBytes, workDir); err != nil {
+		return errors.Wrap(err, "failed to unzip go module")
 	}
 
 	cmd := exec.CommandContext(ctx, "git", "init")
@@ -288,4 +267,56 @@ func (s *GoModulesSyncer) commitZip(ctx context.Context, dep *reposource.GoDepen
 	}
 
 	return nil
+}
+
+func unzip(dep *reposource.GoDependency, zipBytes []byte, workDir string) error {
+	zipFile := path.Join(workDir, "mod.zip")
+	err := os.WriteFile(zipFile, zipBytes, 0666)
+	if err != nil {
+		return errors.Wrapf(err, "failed to create go module zip file %q", zipFile)
+	}
+
+	files, err := modzip.CheckZip(dep.Module, zipFile)
+	if err != nil && len(files.Valid) == 0 {
+		return errors.Wrapf(err, "failed to check go module zip %q", zipFile)
+	}
+
+	if err = os.RemoveAll(zipFile); err != nil {
+		return errors.Wrapf(err, "failed to remove module zip file %q", zipFile)
+	}
+
+	if len(files.Valid) == 0 {
+		return nil
+	}
+
+	valid := make(map[string]struct{}, len(files.Valid))
+	for _, f := range files.Valid {
+		valid[f] = struct{}{}
+	}
+
+	br := bytes.NewReader(zipBytes)
+	err = unpack.Zip(br, int64(br.Len()), workDir, unpack.Opts{
+		SkipInvalid: true,
+		Filter: func(path string, file fs.FileInfo) bool {
+			_, malicious := isPotentiallyMaliciousFilepathInArchive(path, workDir)
+			_, ok := valid[path]
+			return ok && !malicious
+		},
+	})
+
+	if err != nil {
+		return err
+	}
+
+	tmpDir := workDir + ".tmp"
+
+	// mv $workDir $tmpDir
+	err = os.Rename(workDir, tmpDir)
+	if err != nil {
+		return err
+	}
+
+	// mv $tmpDir/$(basename $prefix) $workDir
+	prefix := fmt.Sprintf("%s@%s/", dep.Module.Path, dep.Module.Version)
+	return os.Rename(path.Join(tmpDir, prefix), workDir)
 }

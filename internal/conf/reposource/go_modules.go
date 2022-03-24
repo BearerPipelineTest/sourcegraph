@@ -13,12 +13,12 @@ import (
 //
 // See also: [NOTE: Dependency-terminology]
 type GoDependency struct {
-	module.Version
+	Module module.Version
 }
 
 // NewGoDependency returns a GoDependency for the given module.Version.
 func NewGoDependency(v module.Version) *GoDependency {
-	return &GoDependency{Version: v}
+	return &GoDependency{Module: v}
 }
 
 // ParseGoDependency parses a string in a '<name>@<version>' format into an
@@ -43,7 +43,7 @@ func ParseGoDependency(dependency string) (*GoDependency, error) {
 		return nil, err
 	}
 
-	return &GoDependency{Version: v}, nil
+	return &GoDependency{Module: v}, nil
 }
 
 // ParseGoDependencyFromRepoName is a convenience function to parse a repo name in a
@@ -58,30 +58,30 @@ func (d *GoDependency) Scheme() string {
 
 // PackageSyntax returns the name of the Go module.
 func (d *GoDependency) PackageSyntax() string {
-	return d.Version.Path
+	return d.Module.Path
 }
 
 // PackageManagerSyntax returns the dependency in Go syntax. The returned string
 // can (for example) be passed to `go get`.
 func (d *GoDependency) PackageManagerSyntax() string {
-	return d.Version.String()
+	return d.Module.String()
 }
 
 func (d *GoDependency) PackageVersion() string {
-	return d.Version.Version
+	return d.Module.Version
 }
 
 // RepoName provides a name that is "globally unique" for a Sourcegraph instance.
 //
 // The returned value is used for repo:... in queries.
 func (d *GoDependency) RepoName() api.RepoName {
-	return api.RepoName("go/" + d.Version.Path)
+	return api.RepoName("go/" + d.Module.Path)
 }
 
 func (d *GoDependency) GitTagFromVersion() string {
-	return d.Version.Version
+	return d.Module.Version
 }
 
 func (d *GoDependency) Equal(other *GoDependency) bool {
-	return d == other || (d != nil && other != nil && d.Version == other.Version)
+	return d == other || (d != nil && other != nil && d.Module == other.Module)
 }
