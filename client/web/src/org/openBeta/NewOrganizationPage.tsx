@@ -118,6 +118,7 @@ export const NewOrgOpenBetaPage: React.FunctionComponent<Props> = ({
         if (existId && isSuggested.current && orgId && !loadingOrg) {
             setDisplayBox(true)
             const autofixID = `${orgId}-1`
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             tryGetOrg({ variables: { name: autofixID } })
             setOrgId(autofixID)
         }
@@ -129,6 +130,7 @@ export const NewOrgOpenBetaPage: React.FunctionComponent<Props> = ({
         setOrgId(orgId)
         setDisplayName(event.currentTarget.value)
         setDisplayBox(false)
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         debounceTryGetOrg.current({ variables: { name: orgId } })
     }
 
@@ -136,6 +138,7 @@ export const NewOrgOpenBetaPage: React.FunctionComponent<Props> = ({
         if (displayName && !hasValidId && orgId) {
             setDisplayBox(false)
             isSuggested.current = true
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             debounceTryGetOrg.current({ variables: { name: orgId } })
         }
     }
@@ -145,6 +148,7 @@ export const NewOrgOpenBetaPage: React.FunctionComponent<Props> = ({
         const orgId = normalizeOrgId(event.currentTarget.value)
         setOrgId(orgId)
         setDisplayBox(false)
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         debounceTryGetOrg.current({ variables: { name: orgId } })
     }
 
