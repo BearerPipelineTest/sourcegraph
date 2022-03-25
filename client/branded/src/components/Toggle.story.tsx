@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { action } from '@storybook/addon-actions'
 import { DecoratorFn, Meta, Story } from '@storybook/react'
 
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { Toggle } from './Toggle'

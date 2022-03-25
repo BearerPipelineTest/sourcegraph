@@ -3,8 +3,9 @@ import React from 'react'
 import { Meta, Story } from '@storybook/react'
 
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
-import { PRODUCT_STATUSES } from '@sourcegraph/wildcard/src/components/Badge/constants'
+import { PRODUCT_STATUSES } from '@sourcegraph/wildcard'
 
 import { FeedbackBadge } from '.'
 

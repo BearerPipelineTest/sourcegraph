@@ -2,8 +2,10 @@ import React from 'react'
 
 import { DecoratorFn, Meta, Story } from '@storybook/react'
 
+// eslint-disable-next-line no-restricted-imports
 import { MockedStoryProvider } from '@sourcegraph/storybook/src/apollo/MockedStoryProvider'
-import { WebStory } from '@sourcegraph/web/src/components/WebStory'
+
+import { WebStory } from '../components/WebStory'
 
 import { SurveyPage } from './SurveyPage'
 import { submitSurveyMock } from './SurveyPage.mocks'

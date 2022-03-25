@@ -7,6 +7,7 @@ import { of } from 'rxjs'
 import { Location } from '@sourcegraph/extension-api-types'
 import { NOOP_TELEMETRY_SERVICE } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { extensionsController } from '@sourcegraph/shared/src/testing/searchTestHelpers'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { BrandedStory } from '../../BrandedStory'

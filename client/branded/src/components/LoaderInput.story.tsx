@@ -3,6 +3,7 @@ import React from 'react'
 import { boolean } from '@storybook/addon-knobs'
 import { DecoratorFn, Meta, Story } from '@storybook/react'
 
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { BrandedStory } from './BrandedStory'

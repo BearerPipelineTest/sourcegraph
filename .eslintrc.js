@@ -79,6 +79,10 @@ const config = {
 
 See https://handbook.sourcegraph.com/community/faq#is-all-of-sourcegraph-open-source for more information.`,
           },
+          {
+            group: ['@sourcegraph/*/*', '!@sourcegraph/branded/*', '!@sourcegraph/shared/*'],
+            message: 'Imports from package internal are banned',
+          },
         ],
       },
     ],

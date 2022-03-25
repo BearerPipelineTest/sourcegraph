@@ -6,6 +6,7 @@ import ChevronDownIcon from 'mdi-react/ChevronDownIcon'
 import ChevronLeftIcon from 'mdi-react/ChevronLeftIcon'
 
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { Button } from '../Button'

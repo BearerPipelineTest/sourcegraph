@@ -4,6 +4,7 @@ import { Meta } from '@storybook/react'
 import { StoryFnReactReturnType } from '@storybook/react/dist/ts3.9/client/preview/types'
 
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { Grid } from '../../Grid'

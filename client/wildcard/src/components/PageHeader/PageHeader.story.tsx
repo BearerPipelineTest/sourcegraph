@@ -6,6 +6,7 @@ import PuzzleOutlineIcon from 'mdi-react/PuzzleOutlineIcon'
 import SearchIcon from 'mdi-react/SearchIcon'
 
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { Button } from '../Button'

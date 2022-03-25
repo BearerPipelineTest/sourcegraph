@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { noop } from 'rxjs'
 
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 import { Button, Position } from '@sourcegraph/wildcard'
 

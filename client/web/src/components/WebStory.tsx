@@ -4,8 +4,11 @@ import { MemoryRouter, MemoryRouterProps, RouteComponentProps, withRouter } from
 
 import { NOOP_TELEMETRY_SERVICE, TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
+// eslint-disable-next-line no-restricted-imports
 import { MockedStoryProvider, MockedStoryProviderProps } from '@sourcegraph/storybook/src/apollo/MockedStoryProvider'
+// eslint-disable-next-line no-restricted-imports
 import { usePrependStyles } from '@sourcegraph/storybook/src/hooks/usePrependStyles'
+// eslint-disable-next-line no-restricted-imports
 import { useTheme } from '@sourcegraph/storybook/src/hooks/useTheme'
 // Add root Tooltip for Storybook
 // eslint-disable-next-line no-restricted-imports

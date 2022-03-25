@@ -4,6 +4,7 @@ import { Meta, Story } from '@storybook/react'
 
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
 import { Toggle } from '@sourcegraph/branded/src/components/Toggle'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { Button } from '../Button'

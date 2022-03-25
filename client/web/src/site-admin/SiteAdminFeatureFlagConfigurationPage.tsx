@@ -11,10 +11,10 @@ import { ErrorAlert } from '@sourcegraph/branded/src/components/alerts'
 import { Toggle } from '@sourcegraph/branded/src/components/Toggle'
 import { asError, ErrorLike, isErrorLike, pluralize } from '@sourcegraph/common'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
-import { PageTitle } from '@sourcegraph/web/src/components/PageTitle'
 import { Button, Container, Link, LoadingSpinner, PageHeader, Select, useObservable, Icon } from '@sourcegraph/wildcard'
 
 import { Collapsible } from '../components/Collapsible'
+import { PageTitle } from '../components/PageTitle'
 
 import { fetchFeatureFlags as defaultFetchFeatureFlags } from './backend'
 import { getFeatureFlagReferences, parseProductReference } from './SiteAdminFeatureFlagsPage'

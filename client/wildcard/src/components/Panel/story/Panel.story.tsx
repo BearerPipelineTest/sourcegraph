@@ -9,6 +9,7 @@ import CloseIcon from 'mdi-react/CloseIcon'
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
 import { panels } from '@sourcegraph/branded/src/components/panel/TabbedPanelContent.fixtures'
 import { EmptyPanelView } from '@sourcegraph/branded/src/components/panel/views/EmptyPanelView'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { Button } from '../../Button'

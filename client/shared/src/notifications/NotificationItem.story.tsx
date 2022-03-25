@@ -7,6 +7,7 @@ import { of } from 'rxjs'
 import { NotificationType as NotificationTypeType } from 'sourcegraph'
 
 import { NotificationType } from '@sourcegraph/extension-api-classes'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { NotificationItem } from './NotificationItem'

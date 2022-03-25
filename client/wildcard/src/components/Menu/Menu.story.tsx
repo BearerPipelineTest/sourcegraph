@@ -4,6 +4,7 @@ import { Meta, Story } from '@storybook/react'
 import { noop } from 'lodash'
 
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import { Link } from '../Link'

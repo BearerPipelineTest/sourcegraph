@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { flow } from 'lodash'
 
 import { BrandedStory } from '@sourcegraph/branded/src/components/BrandedStory'
+// eslint-disable-next-line no-restricted-imports
 import webStyles from '@sourcegraph/web/src/SourcegraphWebApp.scss'
 
 import 'storybook-addon-designs'
